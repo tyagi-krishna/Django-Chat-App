@@ -36,55 +36,7 @@
 			rel="stylesheet"
 			href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
 		/>
-		<script type="text/javascript">
-			$(document).on("submit", "#post-form", function (e) {
-				e.preventDefault();
 
-				$.ajax({
-					type: "POST",
-					url: "/send",
-					data: {
-						username: $("#username").val(),
-						room_id: $("#room_id").val(),
-						message: $("#message").val(),
-						csrfmiddlewaretoken: $(
-							"input[name=csrfmiddlewaretoken]"
-						).val(),
-					},
-					success: function (data) {
-						//alert(data)
-					},
-				});
-				document.getElementById("message").value = "";
-			});
-
-			$(document).ready(function () {
-				setInterval(function () {
-					$.ajax({
-						type: "GET",
-						url: "/getMessages/{{room}}/",
-						success: function (response) {
-							console.log(response);
-							$("#display").empty();
-							for (var key in response.messages) {
-								var temp =
-									"<div class='container darker'><b>" +
-									response.messages[key].user +
-									"</b><p>" +
-									response.messages[key].value +
-									"</p><span class='time-left'>" +
-									response.messages[key].date +
-									"</span></div>";
-								$("#display").append(temp);
-							}
-						},
-						error: function (response) {
-							alert("An error occured");
-						},
-					});
-				}, 1000);
-			});
-		</script>
 		<script
 			src="https://code.jquery.com/jquery-3.1.1.min.js"
 			integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -221,16 +173,52 @@
 		</header>
 		<!-- ***** Header Area End ***** -->
 
-		<form id="post-form" action="" method="POST" style="margin: 6cm">
+		<div class="col-lg-12" style="margin-top: 5cm">
+			<div class="section-heading">
+				<h2>
+					<em><h2>{{room}} - DjChat</h2></em><span></span>
+				</h2>
+			</div>
+		</div>
+
+		<div id="display">
+			<!-- <div class="container1 darker">
+			  <b>Tom</b><p>Hello Everyone, How Are You Guys Doing?</p>
+			  <span class="time-left">20th, April 2021</span>
+			</div> -->
+		</div>
+		<script>
+			$(document).ready(function () {
+				setInterval(function () {
+					$.ajax({
+						type: "GET",
+						url: "/getMessages/{{room}}/",
+						success: function (response) {
+							console.log(response);
+							$("#display").empty();
+							for (var key in response.messages) {
+								var temp =
+									"<div class='container1 darker'><b>" +
+									response.messages[key].user +
+									"</b><p>" +
+									response.messages[key].value +
+									"</p><span class='time-left'>" +
+									response.messages[key].date +
+									"</span></div>";
+								$("#display").append(temp);
+							}
+						},
+						error: function (response) {
+							alert("An error occured");
+						},
+					});
+				}, 1000);
+			});
+		</script>
+
+		<form id="post-form" style="margin: 6cm">
 			{% csrf_token %}
 			<div class="row">
-				<div class="col-lg-12">
-					<div class="section-heading">
-						<h2>
-							<em><h2>{{room}} - DjChat</h2></em><span></span>
-						</h2>
-					</div>
-				</div>
 				<div class="col-lg-6">
 					<fieldset>
 						<input
@@ -265,7 +253,6 @@
 					<fieldset>
 						<input
 							type="submit"
-							id="form-submit"
 							class="orange-button"
 							value="Send"
 						/>
@@ -273,6 +260,29 @@
 				</div>
 			</div>
 		</form>
+
+		<script type="text/javascript">
+			$(document).on("submit", "#post-form", function (e) {
+				e.preventDefault();
+
+				$.ajax({
+					type: "POST",
+					url: "/send",
+					data: {
+						username: $("#username").val(),
+						room_id: $("#room_id").val(),
+						message: $("#message").val(),
+						csrfmiddlewaretoken: $(
+							"input[name=csrfmiddlewaretoken]"
+						).val(),
+					},
+					success: function (data) {
+						//alert(data)
+					},
+				});
+				document.getElementById("message").value = "";
+			});
+		</script>
 
 		<div class="contact-us section" id="contact">
 			<div class="container">
